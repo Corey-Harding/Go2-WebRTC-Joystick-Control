@@ -20,7 +20,7 @@ Toggle Obstacle Avoidance: D-Pad Left
 Toggle Headlight Brightness: D-Pad Right
 Toggle Pose Mode: Left Trigger
 Toggle Continuous Gait: Right Bumper + Right Trigger
-Toggle Gaits(Walk, Run, Stair Climb, Down Stairs): Right Bumper
+Toggle Gaits(Walk, Run, Stair Climb, Down Stairs): Right Trigger
 
 Sport Mode Only Controls
 Sit Toggle: A Button
