@@ -97,7 +97,7 @@ async def main():
         logging.error(f"An error occurred: {e}")
 
     while True:
-        pygame.event.pump()
+        pygame.event.clear()
 
         # Note Inverted Axis (-) For Controller Setup * Sensitivity Multiplier for more or less movement below 1=less sensitive above 1=more sensitive
         Lx = -joystick.get_axis(0)*Lxsensitivity # Left analog stick X-axis
@@ -128,7 +128,7 @@ async def main():
                          "parameter": {"x": Ly, "y": Lx, "z": Rx}
                      }
                      )
-                    await asyncio.sleep(0.25)
+                    #await asyncio.sleep(0.25)
                 elif ObstaclesAvoid == True:
                     print(f"Sending move command(Obstacle Avoidance:On)")
                     await conn.datachannel.pub_sub.publish_request_new(
@@ -145,7 +145,7 @@ async def main():
                             "parameter": {"x": Ly*ObstacleAvoidMultiplier, "y": Lx*ObstacleAvoidMultiplier, "yaw": Rx*ObstacleAvoidMultiplier, "mode": 0}
                         }
                     )
-                    await asyncio.sleep(0.25)
+                    #await asyncio.sleep(0.25)
             elif Moving == True & ObstaclesAvoid == True:
                 print(f"Stop move command(Obstacle Avoidance:On)")
                 await conn.datachannel.pub_sub.publish_request_new(
@@ -155,8 +155,9 @@ async def main():
                         "parameter": {"x": 0, "y": 0, "yaw": 0, "mode": 0}
                     }
                 )
-                await asyncio.sleep(0.25)
+                #await asyncio.sleep(0.25)
                 Moving = False
+            await asyncio.sleep(0.1)
 
         elif DogMode == 2: #Standing
             if abs(Ry) > deadzone or abs(Lx) > deadzone or abs(Rx) > deadzone:
