@@ -225,7 +225,7 @@ async def main():
                 	)
                     await asyncio.sleep(.25)  # Wait
                 elif StandDown == False:
-                    if aiMode == False:
+                    if aiMode == False and ObstaclesAvoid == True:
                         print("Performing 'Stand Up' movement...")
                         await conn.datachannel.pub_sub.publish_request_new(
                             RTC_TOPIC["SPORT_MOD"], 
@@ -238,6 +238,16 @@ async def main():
                             RTC_TOPIC["SPORT_MOD"], 
                             {"api_id": SPORT_CMD["BalanceStand"]}
                             )
+                        await asyncio.sleep(.25)  # Wait
+                    elif ObstaclesAvoid == False:
+                        print("Performing Recovery Stand...")
+                        await conn.datachannel.pub_sub.publish_request_new(
+                            RTC_TOPIC["SPORT_MOD"], 
+                            {
+                                "api_id": 1006,
+                                "parameter": {}
+                            }
+                        )
                         await asyncio.sleep(.25)  # Wait
 
         if hat_state == (-1, 0): # Dpad Left
