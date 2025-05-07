@@ -159,7 +159,7 @@ async def main():
                 Moving = False
 
         elif DogMode == 2: #Standing
-            if abs(Ry) > deadzone or abs(Ly) > deadzone or abs(Lx) > deadzone or abs(Rx) > deadzone:
+            if abs(Ry) > deadzone or abs(Lx) > deadzone or abs(Rx) > deadzone:
                 print(f"Sending Euler(Pose) movement...")
                 await conn.datachannel.pub_sub.publish_request_new(
                     RTC_TOPIC["SPORT_MOD"],
