@@ -17,18 +17,20 @@ from go2_webrtc_driver.constants import RTC_TOPIC, SPORT_CMD
 
 async def main():
     pygame.init()
-    pygame.joystick.init()
     if pygame.joystick.get_count() == 0:
+        print("No joystick detected...")
         return
     joystick = pygame.joystick.Joystick(0)
     joystick.init()
+    print("Joystick Initialized...")
 
     #Analog Stick Sensitivity
+    deadzone = 0.1
     Lxsensitivity = 1
     Lysensitivity = 1
     Rxsensitivity = 1
     Rysensitivity = 1
-    ObstacleAvoidMultiplier = 10
+    ObstacleAvoidMultiplier = 1.25 # Increase movement speed in obstacle avoidance mode
 
     #Define Some Toggles
     WalkUpright = False
@@ -88,13 +90,12 @@ async def main():
             {"api_id": SPORT_CMD["Hello"]}
         )
 
-        await asyncio.sleep(.1)  # Wait
+        await asyncio.sleep(.25)  # Wait
         
     except ValueError as e:
         # Log any value errors that occur during the process.
         logging.error(f"An error occurred: {e}")
 
-    deadzone = 0.1
     while True:
         pygame.event.pump()
 
@@ -102,7 +103,7 @@ async def main():
         Lx = -joystick.get_axis(0)*Lxsensitivity # Left analog stick X-axis
         Ly = -joystick.get_axis(1)*Lysensitivity # Left analog stick Y-axis
         Rx = -joystick.get_axis(3)*Rxsensitivity # Right analog stick X-axis
-        Ry = -joystick.get_axis(2)*Rysensitivity # Right analog stick Y-axis
+        Ry = -joystick.get_axis(4)*Rysensitivity # Right analog stick Y-axis
 
         if DogMode == 1: #Move
 
@@ -127,7 +128,7 @@ async def main():
                          "parameter": {"x": Ly, "y": Lx, "z": Rx}
                      }
                      )
-                    await asyncio.sleep(0.1)
+                    await asyncio.sleep(0.25)
                 elif ObstaclesAvoid == True:
                     print(f"Sending move command(Obstacle Avoidance:On)")
                     await conn.datachannel.pub_sub.publish_request_new(
@@ -144,7 +145,7 @@ async def main():
                             "parameter": {"x": Ly*ObstacleAvoidMultiplier, "y": Lx*ObstacleAvoidMultiplier, "yaw": Rx*ObstacleAvoidMultiplier, "mode": 0}
                         }
                     )
-                    await asyncio.sleep(0.1)
+                    await asyncio.sleep(0.25)
             elif Moving == True & ObstaclesAvoid == True:
                 print(f"Stop move command(Obstacle Avoidance:On)")
                 await conn.datachannel.pub_sub.publish_request_new(
@@ -154,19 +155,20 @@ async def main():
                         "parameter": {"x": 0, "y": 0, "yaw": 0, "mode": 0}
                     }
                 )
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.25)
                 Moving = False
 
         elif DogMode == 2: #Standing
-            if abs(Lx) > deadzone or abs(Ly) > deadzone or abs(Rx) > deadzone:
+            if abs(Ry) > deadzone or abs(Ly) > deadzone or abs(Lx) > deadzone or abs(Rx) > deadzone:
+                print(f"Sending Euler(Pose) movement...")
                 await conn.datachannel.pub_sub.publish_request_new(
                     RTC_TOPIC["SPORT_MOD"],
                     {
                         "api_id": SPORT_CMD["Euler"],
-                        "parameter": {"x": Ly, "y": Lx, "z": Rx}
+                        "parameter": {"x": Lx, "y": Ry, "z": Rx}
                     }
                 )
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.25)
         
         lb_pressed = joystick.get_button(4)  # LB
         rb_pressed = joystick.get_button(5)  # RB
@@ -187,7 +189,7 @@ async def main():
                         "parameter": {"data": WalkUpright}
                     }
                 )
-                await asyncio.sleep(.1)  # Wait
+                await asyncio.sleep(.25)  # Wait
             else:
                 print("Performing Recovery Stand...")
                 await conn.datachannel.pub_sub.publish_request_new(
@@ -197,7 +199,7 @@ async def main():
                         "parameter": {}
                     }
                 )
-                await asyncio.sleep(.1)  # Wait
+                await asyncio.sleep(.25)  # Wait
 
         if hat_state == (0, -1):  # Dpad Down
             if lb_pressed == True:
@@ -211,7 +213,7 @@ async def main():
                         "parameter": {"data": StandOut}
                     }
                 )
-                await asyncio.sleep(.1)  # Wait
+                await asyncio.sleep(.25)  # Wait
             else:
                 # Toggle Stand Down movement (Crouch)
                 StandDown = not StandDown
@@ -221,7 +223,7 @@ async def main():
                         RTC_TOPIC["SPORT_MOD"], 
                        {"api_id": SPORT_CMD["StandDown"]}
                 	)
-                    await asyncio.sleep(.1)  # Wait
+                    await asyncio.sleep(.25)  # Wait
                 elif StandDown == False:
                     if aiMode == False:
                         print("Performing 'Stand Up' movement...")
@@ -229,14 +231,14 @@ async def main():
                             RTC_TOPIC["SPORT_MOD"], 
                             {"api_id": SPORT_CMD["StandUp"]}
                             )
-                        await asyncio.sleep(.1)  # Wait
+                        await asyncio.sleep(.25)  # Wait
                     elif aiMode == True:
                         print("Performing 'BalanceStand' movement...")
                         await conn.datachannel.pub_sub.publish_request_new(
                             RTC_TOPIC["SPORT_MOD"], 
                             {"api_id": SPORT_CMD["BalanceStand"]}
                             )
-                        await asyncio.sleep(.1)  # Wait
+                        await asyncio.sleep(.25)  # Wait
 
         if hat_state == (-1, 0): # Dpad Left
             ObstaclesAvoid = not ObstaclesAvoid
@@ -247,7 +249,7 @@ async def main():
                     "parameter": {"enable": ObstaclesAvoid}
                 }
             )
-            await asyncio.sleep(.1)  # Wait
+            await asyncio.sleep(.25)  # Wait
             print(f"Setting obstacle avoidance status: {ObstaclesAvoid}")
 
         if hat_state == (1, 0):  # Dpad Right
@@ -262,7 +264,7 @@ async def main():
                         "parameter": {"brightness": 2.5}
                     }
                 )
-                await asyncio.sleep(.1)  # Wait
+                await asyncio.sleep(.25)  # Wait
             elif Brightness == 25:
                 Brightness = 50
                 print("Setting headlight brightness to 50%...")
@@ -273,7 +275,7 @@ async def main():
                         "parameter": {"brightness": 5}
                     }
                 )
-                await asyncio.sleep(.1)  # Wait
+                await asyncio.sleep(.25)  # Wait
             elif Brightness == 50:
                 Brightness = 75
                 print("Setting headlight brightness to 75%...")
@@ -284,7 +286,7 @@ async def main():
                         "parameter": {"brightness": 7.5}
                     }
                 )
-                await asyncio.sleep(.1)  # Wait
+                await asyncio.sleep(.25)  # Wait
             elif Brightness == 75:
                 Brightness = 100
                 print("Setting headlight brightness to 100%...")
@@ -295,7 +297,7 @@ async def main():
                         "parameter": {"brightness": 10}
                     }
                 )
-                await asyncio.sleep(.1)  # Wait
+                await asyncio.sleep(.25)  # Wait
             elif Brightness == 100:
                 Brightness = 0
                 print("Setting headlight brightness to 0%...")
@@ -306,7 +308,7 @@ async def main():
                         "parameter": {"brightness": 0}
                     }
                 )
-                await asyncio.sleep(.1)  # Wait
+                await asyncio.sleep(.25)  # Wait
 
         if joystick.get_button(6):  # Select
             print("Switch to Damping mode...")
@@ -317,7 +319,7 @@ async def main():
                     "parameter": {}
                 }
             )
-            await asyncio.sleep(.1)  # Wait
+            await asyncio.sleep(.25)  # Wait
 
         if joystick.get_button(7):  # Start
             if lb_pressed == True: # Toggle AI Mode
@@ -369,7 +371,7 @@ async def main():
                     "api_id": 1002, # Switch to Balance Mode
                     "parameter": {}
                 }
-                await asyncio.sleep(.1)  # Wait
+                await asyncio.sleep(.25)  # Wait
 
         if joystick.get_button(0):  # A
             Sit = not Sit #Toggle
@@ -379,14 +381,14 @@ async def main():
                     RTC_TOPIC["SPORT_MOD"], 
                     {"api_id": SPORT_CMD["Sit"]}
                 )
-                await asyncio.sleep(.1)  # Wait
+                await asyncio.sleep(.25)  # Wait
             elif Sit == False:
                 print("Toggling 'Sit' movement...")
                 await conn.datachannel.pub_sub.publish_request_new(
                     RTC_TOPIC["SPORT_MOD"], 
                     {"api_id": SPORT_CMD["RiseSit"]}
                 )
-                await asyncio.sleep(.1)  # Wait
+                await asyncio.sleep(.25)  # Wait
 
         if joystick.get_button(1):  # B
             print("Switch to 'FingerHeart' movement...")
@@ -394,7 +396,7 @@ async def main():
                 RTC_TOPIC["SPORT_MOD"], 
                 {"api_id": SPORT_CMD["FingerHeart"]}
             )
-            await asyncio.sleep(.1)  # Wait
+            await asyncio.sleep(.25)  # Wait
 
         if joystick.get_button(2):  # X
             print("Switch to 'WiggleHips' movement...")
@@ -402,7 +404,7 @@ async def main():
                 RTC_TOPIC["SPORT_MOD"], 
                 {"api_id": SPORT_CMD["WiggleHips"]}
             )
-            await asyncio.sleep(.1)  # Wait
+            await asyncio.sleep(.25)  # Wait
 
         if joystick.get_button(3):  # Y
             print("Switch to 'Hello' movement...")
@@ -410,7 +412,7 @@ async def main():
                 RTC_TOPIC["SPORT_MOD"], 
                 {"api_id": SPORT_CMD["Hello"]}
             )
-            await asyncio.sleep(.1)  # Wait
+            await asyncio.sleep(.25)  # Wait
 
         if lt_value > 0: # Left Trigger
             #Toggle Pose
@@ -420,7 +422,7 @@ async def main():
             elif DogMode == 2:
                 DogMode = 1
                 print("Pose Mode Off...")
-            await asyncio.sleep(.1)  # Wait
+            await asyncio.sleep(.25)  # Wait
 
         if rt_value > 0: # Right Trigger
             if rb_pressed == True:
@@ -434,7 +436,7 @@ async def main():
                         "parameter": {"data": ContinuousGait}
                     }
                 )
-                await asyncio.sleep(.1)  # Wait
+                await asyncio.sleep(.25)  # Wait
             else:
                 #Toggle Gaits
                 if Gait == 1:
@@ -447,7 +449,7 @@ async def main():
                             "parameter": {"data": 2}
                         }
                     )
-                    await asyncio.sleep(.1)  # Wait
+                    await asyncio.sleep(.25)  # Wait
                 elif Gait == 2:
                     Gait = 3
                     print("Setting gait 3...")
@@ -458,7 +460,7 @@ async def main():
                             "parameter": {"data": 3}
                         }
                     )
-                    await asyncio.sleep(.1)  # Wait
+                    await asyncio.sleep(.25)  # Wait
                 elif Gait == 3:
                     Gait = 4
                     print("Setting gait 4...")
@@ -469,7 +471,7 @@ async def main():
                             "parameter": {"data": 4}
                         }
                     )
-                    await asyncio.sleep(.1)  # Wait
+                    await asyncio.sleep(.25)  # Wait
                 elif Gait == 4:
                     Gait = 1
                     print("Setting gait 1...")
@@ -480,7 +482,7 @@ async def main():
                             "parameter": {"data": 1}
                         }
                     )
-                    await asyncio.sleep(.1)  # Wait
+                    await asyncio.sleep(.25)  # Wait
 
 
 if __name__ == "__main__":
@@ -489,4 +491,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         # Handle Ctrl+C to exit gracefully.
         print("\nProgram interrupted by user")
-        sys.exit(0)
+        pygame.quit()
