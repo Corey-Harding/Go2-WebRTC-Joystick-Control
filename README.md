@@ -13,7 +13,7 @@ Run "python dog.py" to receive video from the dog while controlling it via joyst
 
 If you do not need video run "python joy.py" for joystick control of the dog.
 
-Upon Successful Connection of controller Dog switches to Normal Mode and performs the Hello(Greet) Command.
+Upon Successful Connection of controller the Dog switches to Sport Mode, and if the Greet flag is set in config file the dog then performs the Hello(Greet) Command.
 
 Controller Assumes X-Box Style Button Layout(Tested using xbox controller connected via usb)
 Nintendo style layout will swap a/b and x/y
