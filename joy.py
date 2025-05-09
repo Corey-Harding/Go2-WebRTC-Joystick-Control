@@ -14,23 +14,16 @@ import ctypes
 import json
 from go2_webrtc_driver.webrtc_driver import Go2WebRTCConnection, WebRTCConnectionMethod
 from go2_webrtc_driver.constants import RTC_TOPIC, SPORT_CMD
+from config_file import *
 
 async def main():
     pygame.init()
     if pygame.joystick.get_count() == 0:
         print("No joystick detected...")
         return
-    joystick = pygame.joystick.Joystick(0)
+    joystick = pygame.joystick.Joystick(JOYSTICK_NUMBER)
     joystick.init()
     print("Joystick Initialized...")
-
-    #Analog Stick Sensitivity
-    deadzone = 0.1
-    Lxsensitivity = 1
-    Lysensitivity = 1
-    Rxsensitivity = 1
-    Rysensitivity = 1
-    ObstacleAvoidMultiplier = 1.25 # Increase movement speed in obstacle avoidance mode
 
     #Define Some Toggles
     WalkUpright = False
@@ -52,7 +45,7 @@ async def main():
         # conn = Go2WebRTCConnection(WebRTCConnectionMethod.LocalSTA, ip="192.168.12.1")
         # conn = Go2WebRTCConnection(WebRTCConnectionMethod.LocalSTA, serialNumber="B42D2000XXXXXXXX")
         # conn = Go2WebRTCConnection(WebRTCConnectionMethod.Remote, serialNumber="B42D2000XXXXXXXX", username="email@gmail.com", password="pass")
-        conn = Go2WebRTCConnection(WebRTCConnectionMethod.LocalAP)
+        conn = WEBRTC_CONNECTION_TYPE
 
         # Connect to the WebRTC service.
         await conn.connect()
@@ -100,10 +93,10 @@ async def main():
         pygame.event.clear()
 
         # Note Inverted Axis (-) For Controller Setup * Sensitivity Multiplier for more or less movement below 1=less sensitive above 1=more sensitive
-        Lx = -joystick.get_axis(0)*Lxsensitivity # Left analog stick X-axis
-        Ly = -joystick.get_axis(1)*Lysensitivity # Left analog stick Y-axis
-        Rx = -joystick.get_axis(3)*Rxsensitivity # Right analog stick X-axis
-        Ry = -joystick.get_axis(4)*Rysensitivity # Right analog stick Y-axis
+        Lx = -joystick.get_axis(LEFT_X_AXIS)*Lxsensitivity # Left analog stick X-axis
+        Ly = -joystick.get_axis(LEFT_Y_AXIS)*Lysensitivity # Left analog stick Y-axis
+        Rx = -joystick.get_axis(RIGHT_X_AXIS)*Rxsensitivity # Right analog stick X-axis
+        Ry = -joystick.get_axis(RIGHT_Y_AXIS)*Rysensitivity # Right analog stick Y-axis
 
         if DogMode == 1: #Move
 
@@ -117,7 +110,7 @@ async def main():
                 data = json.loads(response['data']['data'])
                 ObstaclesAvoid = data['enable']
 
-            if (abs(Lx) > deadzone or abs(Ly) > deadzone or abs(Rx) > deadzone):
+            if (abs(Lx) > DEADZONE or abs(Ly) > DEADZONE or abs(Rx) > DEADZONE):
                 Moving = True
                 if ObstaclesAvoid == False:
                     print(f"Sending move command(Obstacle Avoidance:Off)...")
@@ -160,7 +153,7 @@ async def main():
             await asyncio.sleep(0.1)
 
         elif DogMode == 2: #Standing
-            if abs(Ry) > deadzone or abs(Lx) > deadzone or abs(Rx) > deadzone:
+            if abs(Ry) > DEADZONE or abs(Lx) > DEADZONE or abs(Rx) > DEADZONE:
                 print(f"Sending Euler(Pose) movement...")
                 await conn.datachannel.pub_sub.publish_request_new(
                     RTC_TOPIC["SPORT_MOD"],
@@ -171,14 +164,14 @@ async def main():
                 )
                 await asyncio.sleep(0.25)
         
-        lb_pressed = joystick.get_button(4)  # LB
-        rb_pressed = joystick.get_button(5)  # RB
-        lt_value = joystick.get_axis(2)  # LT
-        rt_value = joystick.get_axis(5)  # RT
+        lb_pressed = joystick.get_button(LEFT_BUMPER)  # LB
+        rb_pressed = joystick.get_button(RIGHT_BUMPER)  # RB
+        lt_value = joystick.get_axis(LEFT_TRIGGER_AXIS)  # LT
+        rt_value = joystick.get_axis(RIGHT_TRIGGER_AXIS)  # RT
 
         hat_state = joystick.get_hat(0)
 
-        if hat_state == (0, 1):  # Dpad Up
+        if hat_state == D_PAD_UP:  # Dpad Up
             if lb_pressed == True:
                 # Toggle WalkUpright Mode
                 WalkUpright = not WalkUpright #Toggle
@@ -202,7 +195,7 @@ async def main():
                 )
                 await asyncio.sleep(.25)  # Wait
 
-        if hat_state == (0, -1):  # Dpad Down
+        if hat_state == D_PAD_DOWN:  # Dpad Down
             if lb_pressed == True:
                 # Toggle StandOut Mode (Handstand Walk)
                 StandOut = not StandOut #Toggle
@@ -251,7 +244,7 @@ async def main():
                         )
                         await asyncio.sleep(.25)  # Wait
 
-        if hat_state == (-1, 0): # Dpad Left
+        if hat_state == D_PAD_LEFT: # Dpad Left
             ObstaclesAvoid = not ObstaclesAvoid
             await conn.datachannel.pub_sub.publish_request_new(
                 RTC_TOPIC["OBSTACLES_AVOID"], 
@@ -263,7 +256,7 @@ async def main():
             await asyncio.sleep(.25)  # Wait
             print(f"Setting obstacle avoidance status: {ObstaclesAvoid}")
 
-        if hat_state == (1, 0):  # Dpad Right
+        if hat_state == D_PAD_RIGHT:  # Dpad Right
             #Toggle Headlight Brightness
             if Brightness == 0:
                 Brightness = 25
@@ -321,7 +314,7 @@ async def main():
                 )
                 await asyncio.sleep(.25)  # Wait
 
-        if joystick.get_button(6):  # Select
+        if joystick.get_button(SELECT):  # Select
             print("Switch to Damping mode...")
             await conn.datachannel.pub_sub.publish_request_new(
                 RTC_TOPIC["SPORT_MOD"], 
@@ -332,7 +325,7 @@ async def main():
             )
             await asyncio.sleep(.25)  # Wait
 
-        if joystick.get_button(7):  # Start
+        if joystick.get_button(START):  # Start
             if lb_pressed == True: # Toggle AI Mode
                 aiMode = not aiMode # Toggle
                 if aiMode == True: # Activate AI Mode
@@ -384,7 +377,7 @@ async def main():
                 }
                 await asyncio.sleep(.25)  # Wait
 
-        if joystick.get_button(0):  # A
+        if joystick.get_button(A_BUTTON):  # A
             Sit = not Sit #Toggle
             if Sit == True:
                 print("Toggling 'Sit' movement...")
@@ -401,7 +394,7 @@ async def main():
                 )
                 await asyncio.sleep(.25)  # Wait
 
-        if joystick.get_button(1):  # B
+        if joystick.get_button(B_BUTTON):  # B
             print("Switch to 'FingerHeart' movement...")
             await conn.datachannel.pub_sub.publish_request_new(
                 RTC_TOPIC["SPORT_MOD"], 
@@ -409,7 +402,7 @@ async def main():
             )
             await asyncio.sleep(.25)  # Wait
 
-        if joystick.get_button(2):  # X
+        if joystick.get_button(X_BUTTON):  # X
             print("Switch to 'WiggleHips' movement...")
             await conn.datachannel.pub_sub.publish_request_new(
                 RTC_TOPIC["SPORT_MOD"], 
@@ -417,7 +410,7 @@ async def main():
             )
             await asyncio.sleep(.25)  # Wait
 
-        if joystick.get_button(3):  # Y
+        if joystick.get_button(Y_BUTTON):  # Y
             print("Switch to 'Hello' movement...")
             await conn.datachannel.pub_sub.publish_request_new(
                 RTC_TOPIC["SPORT_MOD"], 
@@ -425,7 +418,7 @@ async def main():
             )
             await asyncio.sleep(.25)  # Wait
 
-        if lt_value > 0: # Left Trigger
+        if lt_value > LT_NEUTRAL: # Left Trigger
             #Toggle Pose
             if DogMode == 1:
                 DogMode = 2
@@ -435,7 +428,7 @@ async def main():
                 print("Pose Mode Off...")
             await asyncio.sleep(.25)  # Wait
 
-        if rt_value > 0: # Right Trigger
+        if rt_value > RT_NEUTRAL: # Right Trigger
             if rb_pressed == True:
                 # Toggle Continuous Gait
                 ContinuousGait = not ContinuousGait #Toggle
