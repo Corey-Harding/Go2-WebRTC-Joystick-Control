@@ -9,9 +9,9 @@ Requires https://github.com/legion1581/go2_webrtc_connect
 
 Before first run, modify values in config_file.py to suit your application.
 
-Run "python dog.py" to receive video from the dog while controlling it via joystick(uses video.py example by legion1581 to display video while using joystick).
+Run "python dog.py" to receive video from the dog AND to control it via joystick(uses video.py example by legion1581 to display video while using joystick).
 
-If you do not need video run "python joy.py" for joystick control of the dog.
+If you do ONLY need joystick control of the dog, run "python joy.py", and no video will be displayed.
 
 Upon Successful Connection of controller the Dog switches to Sport Mode, and if the Greet flag is set in config file the dog then performs the Hello(Greet) Command.
 
