@@ -2,6 +2,8 @@
 Control your Unitree Go2 with a Gamepad using Legion1581's Go2_WebRTC_Connect Driver
 
 ## This is a work in progress and is not ready for actual use yet  
+#### I welcome pull requests, please help improve the script
+
 ```
 Requires https://github.com/legion1581/go2_webrtc_connect
 
