@@ -5,9 +5,16 @@ Control your Unitree Go2 with a Gamepad using Legion1581's Go2_WebRTC_Connect Dr
 ```
 Requires https://github.com/legion1581/go2_webrtc_connect
 
+Before first run, modify values in config_file.py to suit your application.
+
+Run "python dog.py" to receive video from the dog while controlling it via joystick(uses video.py example by legion1581 to display video while using joystick).
+
+If you do not need video run "python joy.py" for joystick control of the dog.
+
 Upon Successful Connection of controller Dog switches to Normal Mode and performs the Hello(Greet) Command.
 
-Controller Assumes X-Box Style Button Layout
+Controller Assumes X-Box Style Button Layout(Tested using xbox controller connected via usb)
+Nintendo style layout will swap a/b and x/y
 
 Left Analog Sticks control Movement Front/Back and Strafe Left/Right
 Right Analog Sticks control Pivot/Heading/Turn
