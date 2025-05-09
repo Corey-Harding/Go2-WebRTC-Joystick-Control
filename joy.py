@@ -18,6 +18,7 @@ from config_file import *
 
 async def main():
     pygame.init()
+    clock = pygame.time.Clock()
     if pygame.joystick.get_count() == 0:
         print("No joystick detected...")
         return
@@ -76,21 +77,25 @@ async def main():
             )
             await asyncio.sleep(5)  # Wait
 
-        # Perform a "Hello" movement
-        print("Performing 'Hello' movement...")
-        await conn.datachannel.pub_sub.publish_request_new(
-            RTC_TOPIC["SPORT_MOD"], 
-            {"api_id": SPORT_CMD["Hello"]}
-        )
-
-        await asyncio.sleep(.25)  # Wait
+        if GREET_ON_CONNECT == True:
+            # Perform a "Hello" movement
+            print("Performing 'Hello' movement...")
+            await conn.datachannel.pub_sub.publish_request_new(
+                RTC_TOPIC["SPORT_MOD"], 
+                {"api_id": SPORT_CMD["Hello"]}
+            )
+            await asyncio.sleep(.25)  # Wait
         
     except ValueError as e:
         # Log any value errors that occur during the process.
         logging.error(f"An error occurred: {e}")
-
-    while True:
-        pygame.event.clear()
+        print(f"An error occurred: {e}")
+    run = True
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                print("Closing application...")
+                run = False
 
         # Note Inverted Axis (-) For Controller Setup * Sensitivity Multiplier for more or less movement below 1=less sensitive above 1=more sensitive
         Lx = -joystick.get_axis(LEFT_X_AXIS)*Lxsensitivity # Left analog stick X-axis
@@ -169,7 +174,7 @@ async def main():
         lt_value = joystick.get_axis(LEFT_TRIGGER_AXIS)  # LT
         rt_value = joystick.get_axis(RIGHT_TRIGGER_AXIS)  # RT
 
-        hat_state = joystick.get_hat(0)
+        hat_state = joystick.get_hat(HAT_NUMBER)
 
         if hat_state == D_PAD_UP:  # Dpad Up
             if lb_pressed == True:
@@ -487,6 +492,8 @@ async def main():
                         }
                     )
                     await asyncio.sleep(.25)  # Wait
+        clock.tick(CONTROLLER_FPS_LIMIT)
+        
 
 
 if __name__ == "__main__":
