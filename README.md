@@ -9,9 +9,14 @@ Requires https://github.com/legion1581/go2_webrtc_connect
 
 Before first run, modify values in config_file.py to suit your application.
 
+Joystick values can be retrieved by running the joystick_test.py script
+
 Run "python dog.py" to receive video from the dog AND to control it via joystick(uses video.py example by legion1581 to display video while using joystick).
 
 If you ONLY need joystick control of the dog, run "python joy.py", and no video will be displayed.
+
+If you want to get an idea on how the official unitree remote works take a look at wireless_remote.py
+It is also unfinished and very basic for now
 
 Upon Successful Connection of controller the Dog switches to Sport Mode, and if the Greet flag is set in config file the dog then performs the Hello(Greet) Command.
 
