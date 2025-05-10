@@ -13,6 +13,8 @@ GREET_ON_CONNECT = False # Set to true to wave Hello on connection
 
 JOYSTICK_NUMBER = 0 # Device number for joystick
 #Below numbers represent the button/axis number as seen by pygame
+F1 = 8 #HOME
+F3 = 11 #SHARE
 LEFT_X_AXIS = 0
 LEFT_Y_AXIS = 1
 RIGHT_X_AXIS = 3
@@ -33,14 +35,14 @@ B_BUTTON = 1
 X_BUTTON = 2
 Y_BUTTON = 3
 # If Pose Mode or Gait is triggered continuously then modify the neutral positions below
-LT_NEUTRAL = 0 # Greater than this value = Left Trigger Pulled
-RT_NEUTRAL = 0 # Greater than this value = Right Trigger Pulled
+LT_NEUTRAL = -.9 # Greater than this value = Left Trigger Pulled
+RT_NEUTRAL = -.9 # Greater than this value = Right Trigger Pulled
 #Analog Stick Sensitivity
-DEADZONE = 0.1
+DEADZONE = 0.5
 Lxsensitivity = 1
 Lysensitivity = 1
 Rxsensitivity = 1
 Rysensitivity = 1
 ObstacleAvoidMultiplier = 1.25 # Increase movement speed in obstacle avoidance mode
 
-CONTROLLER_FPS_LIMIT = 10 # Set the program to loop no more than this defined fps, this is not video related!
+CONTROLLER_FPS_LIMIT = 20 # Set the program to loop no more than this defined fps, this is not video related!

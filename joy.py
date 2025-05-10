@@ -492,6 +492,13 @@ async def main():
                         }
                     )
                     await asyncio.sleep(.25)  # Wait
+
+        #Workaround to keep webrtc connection from randomly disconnecting
+        def lowstate_callback(message):
+            current_message = message['data']
+        conn.datachannel.pub_sub.subscribe(RTC_TOPIC['LOW_STATE'], lowstate_callback)
+        await asyncio.sleep(.1)
+
         clock.tick(CONTROLLER_FPS_LIMIT)
         
 
