@@ -53,8 +53,8 @@ async def main():
                     print("RIGHT_BUMPER")
                 if event.button == F1:
                     print("F1")
-                if event.button == F2:
-                    print("F2")
+                if event.button == F3:
+                    print("F3")
 
             #Test Joystick Button Release Events
             elif event.type == pygame.JOYBUTTONUP:
@@ -77,8 +77,8 @@ async def main():
                     print("RIGHT_BUMPER")
                 if event.button == F1:
                     print("F1")
-                if event.button == F2:
-                    print("F2")
+                if event.button == F3:
+                    print("F3")
 
             #Test Joystick Hats
             elif event.type == pygame.JOYHATMOTION:
