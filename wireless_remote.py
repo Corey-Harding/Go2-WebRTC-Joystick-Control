@@ -82,151 +82,151 @@ async def main():
 
             #Test Joystick Button Press Events
             elif event.type == pygame.JOYBUTTONDOWN:
-                print(f"BUTTON ({event.button}) PRESSED")
+                #print(f"BUTTON ({event.button}) PRESSED")
                 if event.button == START:
-                    print("START")
+                    #print("START")
                     keys |= BITMASK_START # Set bit to 1
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == SELECT:
-                    print("SELECT")
+                    #print("SELECT")
                     keys |= BITMASK_SELECT # Set bit to 1
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == A_BUTTON:
-                    print("A_BUTTON")
+                    #print("A_BUTTON")
                     keys |= BITMASK_A # Set bit to 1
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == B_BUTTON:
-                    print("B_BUTTON")
+                    #print("B_BUTTON")
                     keys |= BITMASK_B # Set bit to 1
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == X_BUTTON:
-                    print("X_BUTTON")
+                    #print("X_BUTTON")
                     keys |= BITMASK_X # Set bit to 1
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == Y_BUTTON:
-                    print("Y_BUTTON")
+                    #print("Y_BUTTON")
                     keys |= BITMASK_Y # Set bit to 1
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == LEFT_BUMPER:
-                    print("LEFT_BUMPER")
+                    #print("LEFT_BUMPER")
                     keys |= BITMASK_L1 # Set bit to 1
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == RIGHT_BUMPER:
-                    print("RIGHT_BUMPER")
+                    #print("RIGHT_BUMPER")
                     keys |= BITMASK_R1 # Set bit to 1
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == F1:
-                    print("F1")
+                    #print("F1")
                     keys |= BITMASK_F1 # Set bit to 1
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == F3:
-                    print("F3")
+                    #print("F3")
                     keys |= BITMASK_F3 # Set bit to 1
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
 
             #Test Joystick Button Release Events
             elif event.type == pygame.JOYBUTTONUP:
-                print(f"BUTTON ({event.button}) RELEASED")
+                #print(f"BUTTON ({event.button}) RELEASED")
                 if event.button == START:
-                    print("START")
+                    #print("START")
                     keys &= ~ BITMASK_START # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == SELECT:
-                    print("SELECT")
+                    #print("SELECT")
                     keys &= ~ BITMASK_SELECT # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == A_BUTTON:
-                    print("A_BUTTON")
+                    #print("A_BUTTON")
                     keys &= ~ BITMASK_A # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == B_BUTTON:
-                    print("B_BUTTON")
+                    #print("B_BUTTON")
                     keys &= ~ BITMASK_B # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == X_BUTTON:
-                    print("X_BUTTON")
+                    #print("X_BUTTON")
                     keys &= ~ BITMASK_X # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == Y_BUTTON:
-                    print("Y_BUTTON")
+                    #print("Y_BUTTON")
                     keys &= ~ BITMASK_Y # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == LEFT_BUMPER:
-                    print("LEFT_BUMPER")
+                    #print("LEFT_BUMPER")
                     keys &= ~ BITMASK_L1 # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == RIGHT_BUMPER:
-                    print("RIGHT_BUMPER")
+                    #print("RIGHT_BUMPER")
                     keys &= ~ BITMASK_R1 # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == F1:
-                    print("F1")
+                    #print("F1")
                     keys &= ~ BITMASK_F1 # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.button == F3:
-                    print("F3")
+                    #print("F3")
                     keys &= ~ BITMASK_F3 # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
 
             #Test Joystick Hats
             elif event.type == pygame.JOYHATMOTION:
-                print(f"HAT NUMBER: {str(event.hat)} HAT POSITION: {str(event.value)}")
+                #print(f"HAT NUMBER: {str(event.hat)} HAT POSITION: {str(event.value)}")
                 if event.value == (0, 0):
-                    print("D_PAD_NEUTRAL")
+                    #print("D_PAD_NEUTRAL")
                     keys &= ~ BITMASK_D_PAD_UP # Set bit to 0
                     keys &= ~ BITMASK_D_PAD_DOWN # Set bit to 0
                     keys &= ~ BITMASK_D_PAD_LEFT # Set bit to 0
                     keys &= ~ BITMASK_D_PAD_RIGHT # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.value == D_PAD_UP:
-                    print("D_PAD_UP")
+                    #print("D_PAD_UP")
                     keys |= BITMASK_D_PAD_UP # Set bit to 1
                     keys &= ~ BITMASK_D_PAD_DOWN # Set bit to 0
                     keys &= ~ BITMASK_D_PAD_LEFT # Set bit to 0
                     keys &= ~ BITMASK_D_PAD_RIGHT # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.value == D_PAD_DOWN:
-                    print("D_PAD_DOWN")
+                    #print("D_PAD_DOWN")
                     keys &= ~ BITMASK_D_PAD_UP # Set bit to 0
                     keys |= BITMASK_D_PAD_DOWN # Set bit to 1
                     keys &= ~ BITMASK_D_PAD_LEFT # Set bit to 0
                     keys &= ~ BITMASK_D_PAD_RIGHT # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.value == D_PAD_LEFT:
-                    print("D_PAD_LEFT")
+                    #print("D_PAD_LEFT")
                     keys &= ~ BITMASK_D_PAD_UP # Set bit to 0
                     keys &= ~ BITMASK_D_PAD_DOWN # Set bit to 0
                     keys |= BITMASK_D_PAD_LEFT # Set bit to 1
                     keys &= ~ BITMASK_D_PAD_RIGHT # Set bit to 0
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                 if event.value == D_PAD_RIGHT:
-                    print("D_PAD_RIGHT")
+                    #print("D_PAD_RIGHT")
                     keys &= ~ BITMASK_D_PAD_UP # Set bit to 0
                     keys &= ~ BITMASK_D_PAD_DOWN # Set bit to 0
                     keys &= ~ BITMASK_D_PAD_LEFT # Set bit to 0
                     keys |= BITMASK_D_PAD_RIGHT # Set bit to 1
-                    print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                    #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
 
             #Test Joystick Axis
             elif event.type == pygame.JOYAXISMOTION:
                 if event.axis == LEFT_TRIGGER_AXIS or event.axis == RIGHT_TRIGGER_AXIS:
-                    print(f"AXIS: ({str(event.axis)}) POSITION: ({str(event.value)})")
+                    #print(f"AXIS: ({str(event.axis)}) POSITION: ({str(event.value)})")
                     if event.axis == LEFT_TRIGGER_AXIS and event.value > LT_NEUTRAL:
-                        print(f"LEFT_TRIGGER_AXIS Postion: ({str(event.value)})")
+                        #print(f"LEFT_TRIGGER_AXIS Postion: ({str(event.value)})")
                         keys |= BITMASK_L2 # Set bit to 1
-                        print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                        #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                     else:
-                        print(f"LEFT_TRIGGER_AXIS Postion: ({str(event.value)})")
+                        #print(f"LEFT_TRIGGER_AXIS Postion: ({str(event.value)})")
                         keys &= ~ BITMASK_L2 # Set bit to 0
-                        print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                        #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                     if event.axis == RIGHT_TRIGGER_AXIS and event.value > LT_NEUTRAL:
-                        print(f"RIGHT_TRIGGER_AXIS Postion: ({str(event.value)})")
+                        #print(f"RIGHT_TRIGGER_AXIS Postion: ({str(event.value)})")
                         keys |= BITMASK_R2 # Set bit to 1
-                        print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                        #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
                     else:
-                        print(f"RIGHT_TRIGGER_AXIS Postion: ({str(event.value)})")
+                        #print(f"RIGHT_TRIGGER_AXIS Postion: ({str(event.value)})")
                         keys &= ~ BITMASK_R2 # Set bit to 0
-                        print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
+                        #print(f"Keys variable: {bin(keys)[2:].zfill(16)}")
 
         Lx = joystick.get_axis(LEFT_X_AXIS)*Lxsensitivity # Left analog stick X-axis
         Ly = -joystick.get_axis(LEFT_Y_AXIS)*Lysensitivity # Left analog stick Y-axis
@@ -245,12 +245,13 @@ async def main():
                     "keys": 0
                 }
                 ),
-                timeout=.1
+                timeout = .1
                 )
                 print(f"Response: {response}")
                 await asyncio.sleep(.1)
             except asyncio.TimeoutError:
-                print("Timeout Error")
+                #print("Timeout Error")
+                timeout = .1
 
         if keys > 0:
             try:
@@ -265,12 +266,13 @@ async def main():
                     "keys": keys
                 }
                 ),
-                timeout=.1
+                timeout = .1
                 )
                 print(f"Response: {response}")
                 await asyncio.sleep(.5)
             except asyncio.TimeoutError:
-                print("Timeout Error")
+                #print("Timeout Error")
+                timeout = .1
 
         #Workaround to keep webrtc connection from randomly disconnecting
         def lowstate_callback(message):
